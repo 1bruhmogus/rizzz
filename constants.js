@@ -1,6 +1,5 @@
 import { Category } from './types.js';
 
-// Game list cleared as requested.
 export const GAMES = [];
 
 export const EDUCATIONAL_CONTENT = `
