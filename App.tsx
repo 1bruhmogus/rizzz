@@ -3,18 +3,14 @@ import { GAMES } from './constants';
 import { Game, Category } from './types';
 import GameCard from './components/GameCard';
 import PanicScreen from './components/PanicScreen';
-import AIAssistant from './components/AIAssistant';
 
 function App() {
   const [panicMode, setPanicMode] = useState(false);
   const [activeGame, setActiveGame] = useState<Game | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Keyboard shortcut for panic mode: Press 'Escape' twice quickly or just 'P' if not typing?
-  // Let's go with a specific key combo like 'Control + M' (Minimize) or '`' (Tilde)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Panic key: Tilde (`) or Escape
@@ -113,16 +109,6 @@ function App() {
                     </button>
                 )}
             </div>
-
-            <div className="flex items-center gap-4">
-                <button 
-                    onClick={() => setIsChatOpen(!isChatOpen)}
-                    className={`relative p-2 rounded-lg transition-colors ${isChatOpen ? 'bg-purple-500/20 text-purple-400' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
-                >
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-purple-500 rounded-full animate-ping"></span>
-                </button>
-            </div>
         </header>
 
         {/* Content Area */}
@@ -180,9 +166,6 @@ function App() {
                 </>
             )}
         </div>
-
-        {/* AI Chat Overlay */}
-        <AIAssistant isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
         
         {/* Floating Action Button for Panic (Mobile) */}
         <button 
