@@ -29,6 +29,16 @@
         background: #64748b; 
       }
     </style>
+    <script>
+      // Shim process.env for browser environment
+      if (typeof process === 'undefined') {
+        window.process = {
+          env: {
+            API_KEY: '' // Placeholder to prevent ReferenceError
+          }
+        };
+      }
+    </script>
   <script type="importmap">
 {
   "imports": {
