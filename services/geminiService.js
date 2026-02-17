@@ -1,6 +1,20 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Safely retrieve API Key avoiding ReferenceError for 'process'
+const getApiKey = () => {
+  if (typeof process !== "undefined" && process.env) {
+    return process.env.API_KEY;
+  }
+  // Fallback for browser shim
+  if (typeof window !== "undefined" && window.process && window.process.env) {
+    return window.process.env.API_KEY;
+  }
+  return "";
+};
+
+// Initialize with safe key retrieval. 
+// Note: If key is missing, API calls will fail gracefully in the function below.
+const ai = new GoogleGenAI({ apiKey: getApiKey() });
 
 export const getGameRecommendation = async (
   history, 
