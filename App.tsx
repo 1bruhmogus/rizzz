@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { GAMES } from './constants';
 import { Game } from './types';
@@ -76,6 +77,8 @@ function App() {
           >
             Games
           </button>
+          
+          <div className="my-3 border-t border-purple-900/30 mx-2"></div>
           
           <button 
             onClick={() => { setView('request'); setIsSidebarOpen(false); setActiveGame(null); }}

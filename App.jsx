@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { GAMES } from './constants.js';
 import { Category } from './types.js';
@@ -54,6 +55,8 @@ function App() {
             All Games
           </button>
           
+          <div className="my-3 border-t border-slate-800 mx-2"></div>
+
           <div className="pt-4 pb-2 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Categories</div>
           {Object.values(Category).map(cat => (
              <button 
