@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { GAMES } from './constants';
 import { Game } from './types';
@@ -45,18 +44,19 @@ function App() {
         <div className="p-6 border-b border-purple-900/50 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative shrink-0">
-              <svg className="w-8 h-8 drop-shadow-[0_0_8px_rgba(168,85,247,0.4)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" fill="url(#nebula_grad_tsx)" />
+              <svg className="w-8 h-8 drop-shadow-[0_0_8px_rgba(251,191,36,0.4)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.5 5.5C13.5 4 10.5 4 8.5 5.5C6.5 7 6 10.5 7 13.5C8 16.5 10.5 19 13 19.5C15.5 20 18.5 18.5 19.5 15.5C20.5 12.5 17.5 7 15.5 5.5Z" fill="url(#bean_grad_tsx)"/>
+                <path d="M10 8C9.5 9 9.5 11 10 12" stroke="white" strokeOpacity="0.3" strokeWidth="1.5" strokeLinecap="round"/>
                 <defs>
-                  <linearGradient id="nebula_grad_tsx" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#A855F7"/>
-                    <stop offset="1" stopColor="#6366F1"/>
+                  <linearGradient id="bean_grad_tsx" x1="7" y1="5" x2="19" y2="19" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#FBBF24"/>
+                    <stop offset="1" stopColor="#D97706"/>
                   </linearGradient>
                 </defs>
               </svg>
             </div>
             <h1 className="text-2xl font-black tracking-tighter text-purple-50 lowercase">
-              nebula<span className="text-indigo-400">vault</span>
+              bean<span className="text-[#DAFFD9]">zz</span>
             </h1>
           </div>
           <button 
@@ -74,7 +74,7 @@ function App() {
             onClick={() => { setView('games'); setIsSidebarOpen(false); setActiveGame(null); }}
             className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${view === 'games' ? 'bg-purple-900/40 text-white shadow-inner border border-purple-800/50' : 'text-purple-300/70 hover:text-white hover:bg-purple-900/20'}`}
           >
-            Library
+            Games
           </button>
           
           <button 
@@ -129,7 +129,7 @@ function App() {
                         Back to Library
                     </button>
                 )}
-                {view === 'request' && <h2 className="text-lg font-bold text-white">Vault Request</h2>}
+                {view === 'request' && <h2 className="text-lg font-bold text-white">Request System</h2>}
             </div>
         </header>
 
@@ -166,20 +166,11 @@ function App() {
                             {searchTerm ? `Search results for "${searchTerm}"` : `Available Games`}
                         </h2>
                     </div>
-                    {filteredGames.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {filteredGames.map(game => (
-                                <GameCard key={game.id} game={game} onClick={setActiveGame} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-center py-20 text-purple-700">
-                             <p className="text-xl font-semibold">No games found.</p>
-                             <button onClick={() => setSearchTerm('')} className="mt-4 text-purple-400 hover:text-purple-300 underline underline-offset-4 transition-colors">
-                                 Reset search
-                             </button>
-                         </div>
-                    )}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {filteredGames.map(game => (
+                            <GameCard key={game.id} game={game} onClick={setActiveGame} />
+                        ))}
+                    </div>
                 </div>
             ) : (
                 <div className="max-w-2xl mx-auto py-12 animate-fadeIn">
