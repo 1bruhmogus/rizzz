@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { html } from 'htm/react';
 import { GAMES } from './constants.js';
-import { Category } from './types.js';
 import GameCard from './components/GameCard.js';
 import PanicScreen from './components/PanicScreen.js';
 
@@ -9,12 +8,12 @@ function App() {
   const [panicMode, setPanicMode] = useState(false);
   const [activeGame, setActiveGame] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [view, setView] = useState('games'); // 'games' or 'request'
+  const [requestSubmitted, setRequestSubmitted] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Panic key: Tilde (`) or Escape
       if (e.key === '`' || e.key === '~') {
         setPanicMode(prev => !prev);
       }
@@ -24,17 +23,22 @@ function App() {
   }, []);
 
   const filteredGames = GAMES.filter(game => {
-    const matchesSearch = game.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || game.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    return game.title.toLowerCase().includes(searchTerm.toLowerCase());
   });
+
+  const handleRequestSubmit = (e) => {
+    e.preventDefault();
+    setRequestSubmitted(true);
+    setTimeout(() => setRequestSubmitted(false), 3000);
+    e.target.reset();
+  };
 
   if (panicMode) {
     return html`<${PanicScreen} onExit=${() => setPanicMode(false)} />`;
   }
 
   return html`
-    <div className="flex h-screen bg-[#0d0216] text-purple-50 overflow-hidden">
+    <div className="flex h-screen bg-[#0d0216] text-purple-50 overflow-hidden font-sans">
       
       <aside className=${`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 w-64 bg-[#140424] border-r border-purple-900/50 z-30 transition-transform duration-300 flex flex-col shadow-2xl shadow-purple-900/20`}>
         <div className="p-6 border-b border-purple-900/50 flex items-center justify-between">
@@ -68,22 +72,18 @@ function App() {
 
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           <button 
-            onClick=${() => { setSelectedCategory('All'); setIsSidebarOpen(false); setActiveGame(null); }}
-            className=${`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${selectedCategory === 'All' && !activeGame ? 'bg-purple-900/40 text-white shadow-inner border border-purple-800/50' : 'text-purple-300/70 hover:text-white hover:bg-purple-900/20'}`}
+            onClick=${() => { setView('games'); setIsSidebarOpen(false); setActiveGame(null); }}
+            className=${`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${view === 'games' ? 'bg-purple-900/40 text-white shadow-inner border border-purple-800/50' : 'text-purple-300/70 hover:text-white hover:bg-purple-900/20'}`}
           >
-            All Games
+            Games
           </button>
           
-          <div className="pt-4 pb-2 px-4 text-xs font-semibold text-purple-500/80 uppercase tracking-wider">Categories</div>
-          ${Object.values(Category).map(cat => html`
-             <button 
-             key=${cat}
-             onClick=${() => { setSelectedCategory(cat); setIsSidebarOpen(false); setActiveGame(null); }}
-             className=${`w-full text-left px-4 py-2 rounded-lg text-sm transition-colors ${selectedCategory === cat && !activeGame ? 'bg-purple-900/40 text-purple-300 border border-purple-800/30' : 'text-purple-300/70 hover:text-white hover:bg-purple-900/20'}`}
-           >
-             ${cat}
-           </button>
-          `)}
+          <button 
+            onClick=${() => { setView('request'); setIsSidebarOpen(false); setActiveGame(null); }}
+            className=${`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${view === 'request' ? 'bg-purple-900/40 text-white shadow-inner border border-purple-800/50' : 'text-purple-300/70 hover:text-white hover:bg-purple-900/20'}`}
+          >
+            Request Games
+          </button>
         </nav>
 
         <div className="p-4 border-t border-purple-900/50">
@@ -105,7 +105,7 @@ function App() {
                 <button onClick=${() => setIsSidebarOpen(!isSidebarOpen)} className="md:hidden text-purple-400 hover:text-white">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth=${2} d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
-                ${!activeGame && html`
+                ${!activeGame && view === 'games' && html`
                     <div className="relative group">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg className="h-5 w-5 text-purple-500 group-focus-within:text-purple-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -129,6 +129,9 @@ function App() {
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth=${2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                         Back to Library
                     </button>
+                `}
+                ${view === 'request' && html`
+                    <h2 className="text-lg font-bold text-white">Request System</h2>
                 `}
             </div>
         </header>
@@ -162,11 +165,11 @@ function App() {
                         <p>${activeGame.description}</p>
                     </div>
                 </div>
-            ` : html`
+            ` : view === 'games' ? html`
                 <div>
                     <div className="mb-8">
                         <h2 className="text-2xl font-bold text-white mb-2">
-                            ${searchTerm ? `Search results for "${searchTerm}"` : `${selectedCategory} Games`}
+                            ${searchTerm ? `Search results for "${searchTerm}"` : `Available Games`}
                         </h2>
                         <p className="text-purple-400/80">Select a bean to start gaming. Keep it low-key!</p>
                     </div>
@@ -180,11 +183,58 @@ function App() {
                     ` : html`
                         <div className="text-center py-20 text-purple-700">
                             <p className="text-xl font-semibold">No beans found.</p>
-                            <button onClick=${() => { setSearchTerm(''); setSelectedCategory('All'); }} className="mt-4 text-purple-400 hover:text-purple-300 underline underline-offset-4 transition-colors">
-                                Reset filters
+                            <button onClick=${() => setSearchTerm('')} className="mt-4 text-purple-400 hover:text-purple-300 underline underline-offset-4 transition-colors">
+                                Reset search
                             </button>
                         </div>
                     `}
+                </div>
+            ` : html`
+                <div className="max-w-2xl mx-auto py-12 animate-fadeIn">
+                    <div className="bg-[#140424] border border-purple-900/50 p-8 rounded-2xl shadow-xl">
+                        <h2 className="text-3xl font-bold text-white mb-4">Request a Game</h2>
+                        <p className="text-purple-400/80 mb-8">Can't find your favorite bean? Let us know and we'll try to add it to the vault.</p>
+                        
+                        <form onSubmit=${handleRequestSubmit} className="space-y-6">
+                            <div>
+                                <label className="block text-sm font-medium text-purple-300 mb-2">Game Name</label>
+                                <input 
+                                    required
+                                    type="text" 
+                                    className="w-full bg-[#0d0216] border border-purple-900/50 rounded-lg p-3 text-white focus:ring-2 focus:ring-purple-500 outline-none transition-all"
+                                    placeholder="e.g., Run 3, 2048..."
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-purple-300 mb-2">Game URL (optional)</label>
+                                <input 
+                                    type="url" 
+                                    className="w-full bg-[#0d0216] border border-purple-900/50 rounded-lg p-3 text-white focus:ring-2 focus:ring-purple-500 outline-none transition-all"
+                                    placeholder="https://..."
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-purple-300 mb-2">Message</label>
+                                <textarea 
+                                    className="w-full bg-[#0d0216] border border-purple-900/50 rounded-lg p-3 text-white focus:ring-2 focus:ring-purple-500 outline-none transition-all h-32 resize-none"
+                                    placeholder="Why should we add this game?"
+                                ></textarea>
+                            </div>
+                            
+                            <button 
+                                type="submit"
+                                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 rounded-lg transition-all shadow-lg shadow-purple-600/20 active:scale-[0.98]"
+                            >
+                                Submit Request
+                            </button>
+                        </form>
+
+                        ${requestSubmitted && html`
+                            <div className="mt-6 bg-green-500/10 border border-green-500/20 p-4 rounded-lg text-green-400 text-center animate-bounce">
+                                Request sent successfully! We'll look into it.
+                            </div>
+                        `}
+                    </div>
                 </div>
             `}
         </div>
