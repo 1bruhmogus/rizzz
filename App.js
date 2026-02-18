@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { html } from 'htm/react';
 import { GAMES } from './constants.js';
@@ -44,19 +45,19 @@ function App() {
         <div className="p-6 border-b border-purple-900/50 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative shrink-0">
-              <svg className="w-8 h-8 drop-shadow-[0_0_8px_rgba(251,191,36,0.4)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.5 5.5C13.5 4 10.5 4 8.5 5.5C6.5 7 6 10.5 7 13.5C8 16.5 10.5 19 13 19.5C15.5 20 18.5 18.5 19.5 15.5C20.5 12.5 17.5 7 15.5 5.5Z" fill="url(#bean_grad)"/>
-                <path d="M10 8C9.5 9 9.5 11 10 12" stroke="white" strokeOpacity="0.3" strokeWidth="1.5" strokeLinecap="round"/>
+              <svg className="w-8 h-8 drop-shadow-[0_0_8px_rgba(168,85,247,0.4)]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" fill="url(#nebula_grad)" />
+                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" fill="white" fillOpacity="0.2"/>
                 <defs>
-                  <linearGradient id="bean_grad" x1="7" y1="5" x2="19" y2="19" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#FBBF24"/>
-                    <stop offset="1" stopColor="#D97706"/>
+                  <linearGradient id="nebula_grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#A855F7"/>
+                    <stop offset="1" stopColor="#6366F1"/>
                   </linearGradient>
                 </defs>
               </svg>
             </div>
             <h1 className="text-2xl font-black tracking-tighter text-purple-50 lowercase">
-              bean<span className="text-[#DAFFD9]">zz</span>
+              nebula<span className="text-indigo-400">vault</span>
             </h1>
           </div>
           <button 
@@ -75,7 +76,7 @@ function App() {
             onClick=${() => { setView('games'); setIsSidebarOpen(false); setActiveGame(null); }}
             className=${`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${view === 'games' ? 'bg-purple-900/40 text-white shadow-inner border border-purple-800/50' : 'text-purple-300/70 hover:text-white hover:bg-purple-900/20'}`}
           >
-            Games
+            Library
           </button>
           
           <button 
@@ -131,7 +132,7 @@ function App() {
                     </button>
                 `}
                 ${view === 'request' && html`
-                    <h2 className="text-lg font-bold text-white">Request System</h2>
+                    <h2 className="text-lg font-bold text-white">Vault Request</h2>
                 `}
             </div>
         </header>
@@ -171,7 +172,7 @@ function App() {
                         <h2 className="text-2xl font-bold text-white mb-2">
                             ${searchTerm ? `Search results for "${searchTerm}"` : `Available Games`}
                         </h2>
-                        <p className="text-purple-400/80">Select a bean to start gaming. Keep it low-key!</p>
+                        <p className="text-purple-400/80">Select a game to start playing. Keep it low-key!</p>
                     </div>
                     
                     ${filteredGames.length > 0 ? html`
@@ -182,7 +183,7 @@ function App() {
                         </div>
                     ` : html`
                         <div className="text-center py-20 text-purple-700">
-                            <p className="text-xl font-semibold">No beans found.</p>
+                            <p className="text-xl font-semibold">No games found.</p>
                             <button onClick=${() => setSearchTerm('')} className="mt-4 text-purple-400 hover:text-purple-300 underline underline-offset-4 transition-colors">
                                 Reset search
                             </button>
@@ -193,7 +194,7 @@ function App() {
                 <div className="max-w-2xl mx-auto py-12 animate-fadeIn">
                     <div className="bg-[#140424] border border-purple-900/50 p-8 rounded-2xl shadow-xl">
                         <h2 className="text-3xl font-bold text-white mb-4">Request a Game</h2>
-                        <p className="text-purple-400/80 mb-8">Can't find your favorite bean? Let us know and we'll try to add it to the vault.</p>
+                        <p className="text-purple-400/80 mb-8">Can't find your favorite game? Let us know and we'll try to add it to the vault.</p>
                         
                         <form onSubmit=${handleRequestSubmit} className="space-y-6">
                             <div>
