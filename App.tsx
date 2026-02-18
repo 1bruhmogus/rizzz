@@ -10,8 +10,6 @@ function App() {
   const [activeGame, setActiveGame] = useState<Game | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [view, setView] = useState<'games' | 'request'>('games');
-  const [requestSubmitted, setRequestSubmitted] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -26,13 +24,6 @@ function App() {
   const filteredGames = GAMES.filter(game => {
     return game.title.toLowerCase().includes(searchTerm.toLowerCase());
   });
-
-  const handleRequestSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setRequestSubmitted(true);
-    setTimeout(() => setRequestSubmitted(false), 3000);
-    (e.target as HTMLFormElement).reset();
-  };
 
   if (panicMode) {
     return <PanicScreen onExit={() => setPanicMode(false)} />;
@@ -72,20 +63,23 @@ function App() {
 
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           <button 
-            onClick={() => { setView('games'); setIsSidebarOpen(false); setActiveGame(null); }}
-            className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${view === 'games' ? 'bg-purple-900/40 text-white shadow-inner border border-purple-800/50' : 'text-purple-300/70 hover:text-white hover:bg-purple-900/20'}`}
+            onClick={() => { setIsSidebarOpen(false); setActiveGame(null); }}
+            className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${!activeGame ? 'bg-purple-900/40 text-white shadow-inner border border-purple-800/50' : 'text-purple-300/70 hover:text-white hover:bg-purple-900/20'}`}
           >
             Games
           </button>
           
           <div className="my-3 border-t border-purple-900/30 mx-2"></div>
           
-          <button 
-            onClick={() => { setView('request'); setIsSidebarOpen(false); setActiveGame(null); }}
-            className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${view === 'request' ? 'bg-purple-900/40 text-white shadow-inner border border-purple-800/50' : 'text-purple-300/70 hover:text-white hover:bg-purple-900/20'}`}
+          <a 
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfsajzpstPCnfrzrM2DzOsx9Y_kUXvmpUH3i6R2g2vZyF1-vQ/viewform?usp=publish-editor"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsSidebarOpen(false)}
+            className="block w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors text-purple-300/70 hover:text-white hover:bg-purple-900/20"
           >
             Request Games
-          </button>
+          </a>
         </nav>
 
         <div className="p-4 border-t border-purple-900/50">
@@ -107,7 +101,7 @@ function App() {
                 <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="md:hidden text-purple-400 hover:text-white">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
-                {!activeGame && view === 'games' && (
+                {!activeGame && (
                     <div className="relative group">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg className="h-5 w-5 text-purple-500 group-focus-within:text-purple-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -132,7 +126,6 @@ function App() {
                         Back to Library
                     </button>
                 )}
-                {view === 'request' && <h2 className="text-lg font-bold text-white">Request System</h2>}
             </div>
         </header>
 
@@ -162,7 +155,7 @@ function App() {
                         ></iframe>
                     </div>
                 </div>
-            ) : view === 'games' ? (
+            ) : (
                 <div>
                     <div className="mb-8">
                         <h2 className="text-2xl font-bold text-white mb-2">
@@ -173,17 +166,6 @@ function App() {
                         {filteredGames.map(game => (
                             <GameCard key={game.id} game={game} onClick={setActiveGame} />
                         ))}
-                    </div>
-                </div>
-            ) : (
-                <div className="max-w-2xl mx-auto py-12 animate-fadeIn">
-                    <div className="bg-[#140424] border border-purple-900/50 p-8 rounded-2xl shadow-xl">
-                        <h2 className="text-3xl font-bold text-white mb-4">Request a Game</h2>
-                        <form onSubmit={handleRequestSubmit} className="space-y-6">
-                            <input required type="text" className="w-full bg-[#0d0216] border border-purple-900/50 rounded-lg p-3 text-white outline-none" placeholder="Game Name" />
-                            <textarea className="w-full bg-[#0d0216] border border-purple-900/50 rounded-lg p-3 text-white outline-none h-32" placeholder="Message"></textarea>
-                            <button type="submit" className="w-full bg-purple-600 text-white font-bold py-3 rounded-lg">Submit</button>
-                        </form>
                     </div>
                 </div>
             )}
