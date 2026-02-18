@@ -1,3 +1,4 @@
+
 export enum Category {
   Action = 'Action',
   Puzzle = 'Puzzle',
@@ -10,12 +11,13 @@ export interface Game {
   id: string;
   title: string;
   description: string;
-  url: string; // The embed URL
+  url: string;
   thumbnail: string;
   category: Category;
   popular: boolean;
 }
 
+// ChatMessage interface for the AI assistant history
 export interface ChatMessage {
   id: string;
   role: 'user' | 'model';
