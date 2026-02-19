@@ -1,6 +1,52 @@
 import { Game, Category } from './types';
 
-export const GAMES: Game[] = [];
+export const GAMES: Game[] = [
+  {
+    id: '1',
+    title: 'Slope',
+    description: 'A fast-paced 3D running game where you control a ball rolling down a slope. Avoid obstacles and keep the ball on the track!',
+    url: 'https://kbhgames.com/game/slope-2',
+    thumbnail: 'https://picsum.photos/seed/slope/640/360',
+    category: Category.Arcade,
+    popular: true
+  },
+  {
+    id: '2',
+    title: '2048',
+    description: 'Join the numbers and get to the 2048 tile! A classic puzzle game that is easy to learn but hard to master.',
+    url: 'https://play2048.co/',
+    thumbnail: 'https://picsum.photos/seed/2048/640/360',
+    category: Category.Puzzle,
+    popular: true
+  },
+  {
+    id: '3',
+    title: 'Cookie Clicker',
+    description: 'The original idle game where you bake cookies to rule the universe.',
+    url: 'https://orteil.dashnet.org/cookieclicker/',
+    thumbnail: 'https://picsum.photos/seed/cookie/640/360',
+    category: Category.Strategy,
+    popular: false
+  },
+  {
+    id: '4',
+    title: 'Tetris',
+    description: 'The classic block-stacking puzzle game. Arrange the falling blocks to clear lines.',
+    url: 'https://tetris.com/play-tetris',
+    thumbnail: 'https://picsum.photos/seed/tetris/640/360',
+    category: Category.Classic,
+    popular: true
+  },
+  {
+    id: '5',
+    title: 'Paper.io 2',
+    description: 'Conquer territory by enclosing it with your trail. Watch out for other players trying to cut your line!',
+    url: 'https://paper-io.com/',
+    thumbnail: 'https://picsum.photos/seed/paperio/640/360',
+    category: Category.Action,
+    popular: false
+  }
+];
 
 export const EDUCATIONAL_CONTENT = `
   <h1>Mitochondria</h1>
